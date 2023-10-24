@@ -6,13 +6,15 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 class AddNewPlace extends ConsumerWidget {
   const AddNewPlace({super.key});
 
-  void _addPlace(WidgetRef ref, PlaceModel place) {
-    ref.read(placeProvider.notifier).addPlace(place);
-  }
-
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     String _title = '';
+
+    void _addPlace(WidgetRef ref, String title) {
+      ref.read(placeProvider.notifier).addPlace(title);
+      Navigator.of(context).pop();
+    }
+
 
     return Scaffold(
       appBar: AppBar(
@@ -38,9 +40,7 @@ class AddNewPlace extends ConsumerWidget {
                 onPressed: () {
                   _addPlace(
                     ref,
-                    PlaceModel(
-                      title: _title,
-                    ),
+                    _title,
                   );
                 },
                 icon: const Icon(Icons.add),

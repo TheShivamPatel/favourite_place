@@ -1,4 +1,5 @@
 import 'package:favourite_place/models/place_model.dart';
+import 'package:favourite_place/screen/places_detail.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -9,6 +10,14 @@ class PlacesList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    void _toDetail(PlaceModel place) {
+      Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (context) => PlaceDetailScreen(place: place),
+        ),
+      );
+    }
+
     return ListView.builder(
       itemCount: places.length,
       itemBuilder: (context, index) {
@@ -20,15 +29,17 @@ class PlacesList extends StatelessWidget {
             ),
           );
         }
-        return InkWell(
-          onTap: (){},
-          child: ListTile(
-            leading: Icon(Icons.account_circle),
-            title: Text(
-              places[index].title,
-              style: Theme.of(context).textTheme.titleMedium!.copyWith(color: Theme.of(context).colorScheme.onBackground),
-            ),
+        return ListTile(
+          title: Text(
+            places[index].title,
+            style: Theme.of(context)
+                .textTheme
+                .titleMedium!
+                .copyWith(color: Theme.of(context).colorScheme.onBackground),
           ),
+          onTap: () {
+            _toDetail(places[index]);
+          },
         );
       },
     );
