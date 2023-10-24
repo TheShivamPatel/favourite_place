@@ -1,5 +1,6 @@
 import 'package:favourite_place/providers/add_list_provider.dart';
 import 'package:favourite_place/screen/new_place.dart';
+import 'package:favourite_place/widgets/places_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -35,14 +36,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           ),
         ],
       ),
-      body: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Text(
-            len.toString(),
-            style: const TextStyle(fontSize: 20, color: Colors.white),
-          ),
-        ],
+      body: PlacesList(
+        places: list,
       ),
     );
   }
