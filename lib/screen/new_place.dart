@@ -1,4 +1,4 @@
-import 'package:favourite_place/models/place_model.dart';
+import 'dart:io';
 import 'package:favourite_place/providers/add_list_provider.dart';
 import 'package:favourite_place/widgets/image_input.dart';
 import 'package:flutter/material.dart';
@@ -9,10 +9,15 @@ class AddNewPlace extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    String _title = '';
+    String? _title;
+    File? _selectedImage;
 
-    void _addPlace(WidgetRef ref, String title) {
-      ref.read(placeProvider.notifier).addPlace(title);
+    void _addPlace(WidgetRef ref) {
+      if (_title == null || _selectedImage == null) {
+        return;
+      }
+
+      ref.read(placeProvider.notifier).addPlace(_title!, _selectedImage!);
       Navigator.of(context).pop();
     }
 
@@ -37,7 +42,9 @@ class AddNewPlace extends ConsumerWidget {
                 const SizedBox(
                   height: 20,
                 ),
-                const ImageInput(),
+                ImageInput(onPickedImage: (image) {
+                  _selectedImage = image;
+                }),
                 const SizedBox(
                   height: 20,
                 ),
@@ -45,7 +52,6 @@ class AddNewPlace extends ConsumerWidget {
                   onPressed: () {
                     _addPlace(
                       ref,
-                      _title,
                     );
                   },
                   icon: const Icon(Icons.add),
