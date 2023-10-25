@@ -61,7 +61,7 @@ class _ImageInputState extends State<ImageInput> {
                 .primary
                 .withOpacity(0.4)),
       ),
-      height: 350,
+      height: 250,
       width: double.infinity,
       alignment: Alignment.center,
       child: content,

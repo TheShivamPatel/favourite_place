@@ -14,8 +14,10 @@ class PlaceDetailScreen extends StatelessWidget {
           place.title,
         ),
       ),
-      body: Container(
-        child: Text('Detail Screen'),
+      body: Image.file(
+        place.image,
+        height: double.infinity,
+        width: double.infinity,
       ),
     );
   }
