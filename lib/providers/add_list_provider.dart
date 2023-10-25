@@ -2,12 +2,41 @@ import 'dart:io';
 
 import 'package:favourite_place/models/place_model.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:path_provider/path_provider.dart' as syspaths;
+import 'package:path/path.dart' as path;
+import 'package:sqflite/sqflite.dart' as sql;
+import 'package:sqflite/sqlite_api.dart';
 
 class PlaceNotifier extends StateNotifier<List<PlaceModel>> {
   PlaceNotifier() : super([]);
 
-  void addPlace(String title, File image, String location) {
-    final newPlace = PlaceModel(title: title, image: image, location: location);
+  void addPlace(String title, File image, String location) async {
+    final appDir = await syspaths.getApplicationDocumentsDirectory();
+    final fileName = path.basename(image.path);
+    final copiedImage = await image.copy('${appDir.path}/$fileName');
+
+    final newPlace =
+        PlaceModel(title: title, image: copiedImage, location: location);
+
+    final dbPath = await sql.getDatabasesPath();
+    // it will go to database and create the data base
+    // then if database create first time, then it will onCreate
+    final db = await sql.openDatabase(
+      path.join(dbPath, 'places.db'),
+      onCreate: (db, version) {
+        // this function is allow to do some initial work // db gives the access to the database
+        return db.execute(
+            'CREATE TABLE user_places(id TEXT PRIMARY KEY, title TEXT, image TEXT, location TEXT)'); // we will use REAL for decimal values
+      },
+      version: 1,
+    );
+    db.insert('user_places', {
+      'id' : newPlace.id,
+      'title' : newPlace.title,
+      'image' : newPlace.image,
+      'location' : newPlace.location
+    });
+
     state = [newPlace, ...state];
   }
 }

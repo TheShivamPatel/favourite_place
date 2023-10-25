@@ -30,7 +30,7 @@ class PlacesList extends StatelessWidget {
           );
         }
         return Padding(
-          padding: EdgeInsets.only(top: 10),
+          padding: const EdgeInsets.only(top: 10),
           child: ListTile(
             leading: CircleAvatar(
               radius: 22,
