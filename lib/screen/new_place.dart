@@ -1,5 +1,6 @@
 import 'package:favourite_place/models/place_model.dart';
 import 'package:favourite_place/providers/add_list_provider.dart';
+import 'package:favourite_place/widgets/image_input.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -15,40 +16,45 @@ class AddNewPlace extends ConsumerWidget {
       Navigator.of(context).pop();
     }
 
-
     return Scaffold(
       appBar: AppBar(
         title: const Text('Add New Place'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(20),
-        child: Form(
-          child: Column(
-            children: [
-              TextFormField(
-                decoration: const InputDecoration(
-                  label: Text('Title'),
+        child: SingleChildScrollView(
+          child: Form(
+            child: Column(
+              children: [
+                TextFormField(
+                  decoration: const InputDecoration(
+                    label: Text('Title'),
+                  ),
+                  onChanged: (value) {
+                    _title = value.toString();
+                  },
                 ),
-                onChanged: (value) {
-                  _title = value.toString();
-                },
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              ElevatedButton.icon(
-                onPressed: () {
-                  _addPlace(
-                    ref,
-                    _title,
-                  );
-                },
-                icon: const Icon(Icons.add),
-                label: const Text(
-                  'Add Place',
+                const SizedBox(
+                  height: 20,
                 ),
-              ),
-            ],
+                const ImageInput(),
+                const SizedBox(
+                  height: 20,
+                ),
+                ElevatedButton.icon(
+                  onPressed: () {
+                    _addPlace(
+                      ref,
+                      _title,
+                    );
+                  },
+                  icon: const Icon(Icons.add),
+                  label: const Text(
+                    'Add Place',
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),
