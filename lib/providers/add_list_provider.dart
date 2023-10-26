@@ -26,17 +26,18 @@ Future<Database> _getDatabase() async {
 class PlaceNotifier extends StateNotifier<List<PlaceModel>> {
   PlaceNotifier() : super([]);
 
-  void loadPlace() async {
+  Future<void> loadPlace() async {
     final db = await _getDatabase();
     final data = await db.query('user_places');
-    final places = data.map(
-          (row) =>
-          PlaceModel(
+    final places = data
+        .map(
+          (row) => PlaceModel(
               id: row['id'] as String,
               title: row['title'] as String,
               image: File(row['image'] as String),
               location: row['location'] as String),
-    ).toList();
+        )
+        .toList();
     state = places;
   }
 
@@ -46,7 +47,7 @@ class PlaceNotifier extends StateNotifier<List<PlaceModel>> {
     final copiedImage = await image.copy('${appDir.path}/$fileName');
 
     final newPlace =
-    PlaceModel(title: title, image: copiedImage, location: location);
+        PlaceModel(title: title, image: copiedImage, location: location);
 
     final db = await _getDatabase();
 
@@ -62,7 +63,7 @@ class PlaceNotifier extends StateNotifier<List<PlaceModel>> {
 }
 
 final placeProvider = StateNotifierProvider<PlaceNotifier, List<PlaceModel>>(
-      (ref) {
+  (ref) {
     return PlaceNotifier();
   },
 );

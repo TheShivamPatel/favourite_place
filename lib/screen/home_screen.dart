@@ -12,6 +12,14 @@ class HomeScreen extends ConsumerStatefulWidget {
 }
 
 class _HomeScreenState extends ConsumerState<HomeScreen> {
+  late Future<void> placesFuture;
+
+  @override
+  void initState() {
+    super.initState();
+    placesFuture = ref.read(placeProvider.notifier).loadPlace();
+  }
+
   void _addNewPlace() {
     Navigator.push(
       context,
@@ -24,7 +32,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     final list = ref.watch(placeProvider);
-    var len = list.length;
 
     return Scaffold(
       appBar: AppBar(
@@ -36,8 +43,14 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           ),
         ],
       ),
-      body: PlacesList(
-        places: list,
+      body: FutureBuilder(
+        future: placesFuture,
+        builder: (context, snapshot) =>
+            snapshot.connectionState == ConnectionState.waiting
+                ? const Center(child: CircularProgressIndicator())
+                : PlacesList(
+                    places: list,
+                  ),
       ),
     );
   }
